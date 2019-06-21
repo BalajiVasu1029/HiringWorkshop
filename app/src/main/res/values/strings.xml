@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Barebones</string>
+    <string name="video_title">Title : </string>
+    <string name="video_channel">Channel : </string>
+    <string name="video_views">Views : </string>
+
+    <string name="video_like">Like</string>
+    <string name="video_unlike">Unlike</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="unsubscribe">Unsubscribe</string>
+    <string name="channelsubscriber">Channel Name</string>
+    <string name="channelowner">Channel Owner</string>
+    <string name="channelname">Channel Name:</string>
+    <string name="comment_here">Comment here</string>
+    <string name="send">Send</string>
+    <string name="user">User</string>
+    <string name="comment">Comment</string>
+</resources>
