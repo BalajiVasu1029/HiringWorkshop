@@ -33,7 +33,7 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof CommentsViewHolder) {
             CommentsViewHolder holder = (CommentsViewHolder) viewHolder;
-            holder.mUserTextView.setText(mCommentsList.get(position).getUser());
+            holder.mUserTextView.setText(mCommentsList.get(position).getUser().getUserName());
             holder.mCommentTextView.setText(mCommentsList.get(position).getComment());
         }
     }

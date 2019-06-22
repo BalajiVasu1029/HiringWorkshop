@@ -6,7 +6,13 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Video implements Parcelable {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class Video extends RealmObject implements Parcelable {
+
+    @PrimaryKey
+    private int videoId;
 
     @SerializedName("image")
     @Expose

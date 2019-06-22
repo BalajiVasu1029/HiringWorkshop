@@ -20,7 +20,7 @@ public interface ApiInterface {
     Call<List<Comments>> getVideoComments();
 
     @POST("api/workshop/comments")
-    Call<ResponseBody> postVideoComments(@Field("user") String user,
+    Call<Comments> postVideoComments(@Field("user") String user,
                                          @Field("comment") String comment);
 
 }

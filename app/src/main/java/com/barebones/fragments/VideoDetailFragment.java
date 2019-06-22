@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +30,7 @@ import com.barebones.retrofit.ApiInterface;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,6 +49,10 @@ public class VideoDetailFragment extends Fragment {
     private Button mVideoLikeView;
     private boolean isVideoLiked = false;
     private Button mSubscribeButton;
+    private EditText mCommentEditText;
+    private Button mCommentButton;
+
+
     private Video mVideo;
 
     private RecyclerView mCommentsRecyclerView;
@@ -73,13 +80,15 @@ public class VideoDetailFragment extends Fragment {
     }
 
     private void getViewsReferences(View view) {
-        mThumbImageView = view.findViewById(R.id.video_thumbnail_image_view);
         mVideoTitleView = view.findViewById(R.id.video_title_text_view);
         mVideoChannelView = view.findViewById(R.id.video_channel_text_view);
         mVideoViewsView = view.findViewById(R.id.video_likes_text_view);
         mSubscribeButton = view.findViewById(R.id.subscribe_button_view);
         mVideoLikeView = view.findViewById(R.id.video_like_text_view);
         mCommentsRecyclerView = view.findViewById(R.id.comments_recycler_view);
+        mThumbImageView = view.findViewById(R.id.video_thumbnail_image_view);
+        mCommentEditText = view.findViewById(R.id.comment_edit_text);
+        mCommentButton = view.findViewById(R.id.comment_button);
 
         mThumbImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +96,6 @@ public class VideoDetailFragment extends Fragment {
                 //Play Video
             }
         });
-
         mSubscribeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,13 +108,52 @@ public class VideoDetailFragment extends Fragment {
                 handleLikeButton();
             }
         });
-
         mVideoChannelView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 launchChannelScreen();
             }
         });
+        mCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postCommentToApi();
+            }
+        });
+    }
+
+    private void postCommentToApi() {
+        if (mCommentEditText.getText() != null) {
+            final String comment = mCommentEditText.getText().toString();
+            String user = "Test";
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(Constants.BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            ApiInterface apiInterface = retrofit.create(ApiInterface.class);
+            Call<Comments> call = apiInterface.postVideoComments(user , comment);
+            call.enqueue(new Callback<Comments>() {
+                @Override
+                public void onResponse(Call<Comments> call, Response<Comments> response) {
+                    if(response.isSuccessful()){
+                        Comments comments = response.body();
+                        if (comments != null) {
+
+                        }
+                    } else  {
+                        Toast.makeText(getContext(),response.errorBody().toString(),Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Comments> call, Throwable throwable) {
+                    Toast.makeText(getContext(),throwable.toString(),Toast.LENGTH_SHORT).show(); // ALL NETWORK ERROR HERE
+                }
+            });
+
+        }
     }
 
     private void launchChannelScreen() {
@@ -206,7 +253,8 @@ public class VideoDetailFragment extends Fragment {
 
     private void populateVideoDetails() {
         if (mVideo != null) {
-            //mThumbImageView.setImageUri();
+            Uri uri = Uri.parse(mVideo.getImage());
+            //mThumbImageView.setImageURI(uri);
             mVideoTitleView.setText(mVideoTitleView.getText()+ mVideo.getDescription());
             mVideoChannelView.setText(mVideoChannelView.getText() + mVideo.getChannel());
             mVideoViewsView.setText(mVideoViewsView.getText() + mVideo.getViews());

@@ -31,4 +31,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
+    //implementation 'com.facebook.fresco:fresco:2.0.0'
+    // Realm
+    implementation 'io.realm:realm-android:0.82.1'
+
+
 }
